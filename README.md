@@ -1,9 +1,13 @@
-## Para compilar y ejecutar el proyecto en Intellij IDEA
+## Instrucciones
 
-Al descargar
 
-Desde línea de comandos:
+#### Para compilar y ejecutar el proyecto en Intellij IDEA
+
 * Abrir un terminal, ir al directorio del proyecto y ejecutar "gradle idea".
-* Ejecutar "./gradlew build && java -jar build/libs/gs-spring-boot-0.1.0.jar". Esto compila los cambios y pone el servidor en marcha.
+* Importar el proyecto con IntelliJ IDEA y ejecutarlo como "Application"
 
-También se puede compilar y lanzar el servidor desde Intellij IDEA.
+
+#### Para hacer un .jar ejecutable
+
+* Abrir un terminal, ir al directorio del proyecto y ejecutar "gradle build" 
+* Se habrá añadido un fichero .jar en el directorio "build/libs"
