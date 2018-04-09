@@ -1,0 +1,40 @@
+--instación mongo en MacOS
+brew install mongo
+sudo mkdir -p /data/db
+sudo chmod 777 /data/db
+
+mongod --lanza el servidor
+mongo  -- lanza shell cliente y entra
+
+--crear usuarios
+
+use admin
+db.createUser(
+  {
+    user: "XXXX",
+    pwd: "XXXX",
+    roles: [ { role: "userAdminAnyDatabase", db: "XXXX" } ]
+  }
+)
+
+use twitter
+db.createUser(
+  {
+    user: "XXXX",
+    pwd: "XXXX",
+    roles: [ { role: "readWrite", db: "XXXX" }]
+  }
+)
+
+
+--para poder utilizar el fichero de configuracion
+sudo mkdir -p /var/log/mongodb
+sudo mkdir -p /var/lib/mongodb
+
+-- Arranque cargando la configuración
+-- utilizar el fichero mongod.conf de este mismo paquete
+sudo mongod --config /etc/mongod.conf
+
+
+mongo --port XXXX -u "XXXX" -p "XXXX" --authenticationDatabase "XXXX"
+mongo --port XXXX -u "XXXX" -p "XXXX" --authenticationDatabase "XXXX"

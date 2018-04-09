@@ -1,4 +1,4 @@
-package service;
+package core.service;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.social.twitter.api.SearchMetadata;
@@ -6,12 +6,11 @@ import org.springframework.social.twitter.api.SearchResults;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.social.twitter.api.Twitter;
 import org.springframework.social.twitter.api.impl.TwitterTemplate;
-import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
 
-@Service
+//@Service
 public class TwitterLookupService {
     @Value("${twitter.consumerKey}")
     private String consumerKey;
