@@ -1,5 +1,6 @@
-package core;
+package core.controller;
 
+import core.utils.Encryptor;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -8,7 +9,9 @@ public class HelloController {
 
     @RequestMapping("/hello")
     public String hello() {
-        return "Hey Nico! Greetings from Spring Boot!";
+
+        //return Encryptor.encryptAES("esto es una prue".trim());
+        return Encryptor.aesEncryptor("TEXTO DE PRUEBA A ENCRIPTAR");
     }
 
 }

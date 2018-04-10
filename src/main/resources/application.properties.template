@@ -1,0 +1,16 @@
+# MONGODB (MongoProperties)
+spring.data.mongodb.database= XXXX
+spring.data.mongodb.authentication-database= XXXX
+spring.data.mongodb.host= XXXX
+spring.data.mongodb.password= XXXX
+spring.data.mongodb.port= XXXX
+spring.data.mongodb.username= XXXX
+
+#TWITTER ACCESS
+twitter.consumerKey= XXXX
+twitter.consumerSecret=XXXX
+twitter.accessToken=XXXX
+twitter.accessTokenSecret=XXXX
+
+#ENCRYPTOR
+encrypt.aes.key = XXXX
