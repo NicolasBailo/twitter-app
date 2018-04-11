@@ -10,10 +10,9 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class Encryptor {
 
-    @Value("${encrypt.aes.key}")
-    private static String aesKey;
 
-    public static String aesEncryptor(String data)
+
+    public String aesEncryptor(String data, String aesKey)
              {
                  try {
                      SecretKeySpec skeySpec = new SecretKeySpec(aesKey.getBytes(), "AES");

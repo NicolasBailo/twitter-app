@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
 
-@Document(collection = "tweets")
+//@Document(collection = "tweets")
 public class TweetJsonDto implements Serializable {
 
     @Id
