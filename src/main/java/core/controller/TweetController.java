@@ -20,7 +20,7 @@ public class TweetController {
     @Autowired
     EncryptService encryptService;
 
-    @RequestMapping("/encrypt")
+    @RequestMapping("/search")
     @ResponseBody
     public List<GeneratedTweetDto> search(@RequestParam("q") String q) {
 
