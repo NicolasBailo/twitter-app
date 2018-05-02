@@ -7,6 +7,7 @@ public class GeneratedTweetDto extends TweetJsonDto{
 
     @JsonIgnore
     private String idReferenced;
+    public String plainText;
 
     public String getIdReferenced() {
         return idReferenced;
@@ -14,5 +15,8 @@ public class GeneratedTweetDto extends TweetJsonDto{
 
     public void setIdReferenced(String idReferenced) {
         this.idReferenced = idReferenced;
+    }
+    public void setPlainText(String plainText) {
+        this.plainText = plainText;
     }
 }

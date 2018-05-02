@@ -29,43 +29,40 @@ public class EncryptService {
     @Value("${encrypt.aes.key}")
     private String aesKey;
 
+    private GeneratedTweetDto copyAndEncryptTweet(Encryptor encryptor, Tweet tweet) {
+        GeneratedTweetDto generatedTweetDto = new GeneratedTweetDto();
+
+        generatedTweetDto.setIdReferenced(tweet.getIdStr());
+        String textEncrypted = encryptor.aesEncryptor(tweet.getText(), aesKey);
+        generatedTweetDto.setText(textEncrypted);
+        generatedTweetDto.setPlainText(tweet.getText());
+        generatedTweetDto.setFromUser(tweet.getFromUser());
+
+        return generatedTweetDto;
+    }
 
     public List<GeneratedTweetDto> encryptTweets(List<Tweet> tweets) {
-        Encryptor encryptor = new Encryptor();
-
-
         List<GeneratedTweetDto> result = new ArrayList<>();
         List<SearchedTweetDto> oldTweets = new ArrayList<>();
-        //List<ResponseAuxDto> lista = new ArrayList<>();
 
-        for (Tweet tweet : tweets){
-
+        Encryptor encryptor = new Encryptor();
+        for (Tweet tweet : tweets) {
             SearchedTweetDto searchedTweetDto = new SearchedTweetDto();
-            GeneratedTweetDto generatedTweetDto = new GeneratedTweetDto();
 
             BeanUtils.copyProperties(tweet, searchedTweetDto);
             oldTweets.add(searchedTweetDto);
 
-            generatedTweetDto.setIdReferenced(tweet.getIdStr());
-
-            if(tweet.getText()!=null) {
-                String textEncrypted = encryptor.aesEncryptor(tweet.getText(),aesKey);
-                generatedTweetDto.setText(textEncrypted);
-                result.add(generatedTweetDto);
-            //lista.add(new ResponseAuxDto(tweet.getText(),encryptor.aesEncryptor(tweet.getText(),aesKey)));
+            if (tweet.getText() != null) {
+                result.add(copyAndEncryptTweet(encryptor, tweet));
             }
-
         }
 
         searchedTweetRepository.save(oldTweets);
         generatedTweetRepository.save(result);
 
         return result;
-        //return lista;
     }
 
 
-
 }
-
 
