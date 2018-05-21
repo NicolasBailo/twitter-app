@@ -2,6 +2,7 @@ package core.service;
 
 import core.db.model.GeneratedTweetDto;
 import core.db.model.SearchedTweetDto;
+import core.db.model.TweetJsonDto;
 import core.db.repository.IGeneratedTweetRepository;
 import core.db.repository.ISearchedTweetRepository;
 import core.utils.Encryptor;
@@ -29,7 +30,11 @@ public class EncryptService {
     @Value("${encrypt.aes.key}")
     private String aesKey;
 
-    private GeneratedTweetDto copyAndEncryptTweet(Encryptor encryptor, Tweet tweet) {
+    public EncryptService(){
+        super();
+    }
+
+    private GeneratedTweetDto copyAndEncryptTweet(Encryptor encryptor, SearchedTweetDto tweet) {
         GeneratedTweetDto generatedTweetDto = new GeneratedTweetDto();
 
         generatedTweetDto.setIdReferenced(tweet.getIdStr());
@@ -41,12 +46,12 @@ public class EncryptService {
         return generatedTweetDto;
     }
 
-    public List<GeneratedTweetDto> encryptTweets(List<Tweet> tweets) {
+    public List<GeneratedTweetDto> encryptTweets(List<SearchedTweetDto> tweets) {
         List<GeneratedTweetDto> result = new ArrayList<>();
         List<SearchedTweetDto> oldTweets = new ArrayList<>();
 
         Encryptor encryptor = new Encryptor();
-        for (Tweet tweet : tweets) {
+        for (SearchedTweetDto tweet : tweets) {
             SearchedTweetDto searchedTweetDto = new SearchedTweetDto();
 
             BeanUtils.copyProperties(tweet, searchedTweetDto);
@@ -63,6 +68,16 @@ public class EncryptService {
         return result;
     }
 
+    public GeneratedTweetDto encryptTweet(SearchedTweetDto tweet) {
+        Encryptor encryptor = new Encryptor();
+        //SearchedTweetDto searchedTweetDto = new SearchedTweetDto();
+
+        //BeanUtils.copyProperties(tweet, searchedTweetDto);
+
+        if (tweet.getText() != null) {
+            return copyAndEncryptTweet(encryptor, tweet);
+        }
+        return null;
+    }
 
 }
-

@@ -15,6 +15,16 @@ public class TweetJsonDto implements Serializable {
 
     //EntityDto [] entities;
 
+    /*Object extradata;
+
+    public Object getExtradata() {
+        return extradata;
+    }
+
+    public void setExtradata(Object extradata) {
+        this.extradata = extradata;
+    }*/
+
     Integer favouriteCount;
 
     Boolean favorited;

@@ -5,14 +5,16 @@ import core.db.model.ResponseAuxDto;
 import core.service.EncryptService;
 import core.service.TwitterLookupService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.social.UncategorizedApiException;
+import org.springframework.social.twitter.api.SearchResults;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@Controller
 public class TweetController {
 
     @Autowired
@@ -20,10 +22,24 @@ public class TweetController {
     @Autowired
     EncryptService encryptService;
 
-    @RequestMapping("/search")
-    @ResponseBody
-    public List<GeneratedTweetDto> search(@RequestParam("q") String q) {
 
-        return encryptService.encryptTweets(twitter.search(q));
+    @MessageMapping("/search")
+    public void search(@RequestParam("query") String query) {
+        twitter.search(query);
     }
+
+    @ResponseStatus(value= HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(UncategorizedApiException.class)
+    public SearchResults handleUncategorizedApiException() {
+        return twitter.emptyAnswer();
+    }
+
+
+//    @RequestMapping("/x")
+//    @ResponseBody
+//    public List<GeneratedTweetDto> x(@RequestParam("q") String q) {
+//        return null;
+//        //return encryptService.encryptTweets(twitter.search(q));
+//    }
+
 }
