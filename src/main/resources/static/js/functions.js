@@ -3,6 +3,8 @@ var templatePlainTweets = null;
 var templateEncryptedTweets = null;
 var stompClient = null;
 var menu = 1;
+var currentPage = 0;
+var totalPages = 1;
 
 function showEncrpytedTweet(generatedTweetDto) {
     var data = JSON.parse(generatedTweetDto.body)
@@ -20,13 +22,16 @@ function unsubscribeIfNeeded() {
 
 function startSubscription(target, query) {
     unsubscribeIfNeeded();
+
     stompClient.send("/app/" + target, {}, query);
     subscription = stompClient.subscribe('/queue/search/' + query, showEncrpytedTweet);
 }
 
 function listFromDatabase(text) {
     // Peticion AJAX para buscar Tweets
-    $.getJSON('/searchedTweets/search/findByTextContaining?text=' + text, {}, function(data) {
+    $.getJSON('/searchedTweets/search/findByTextContaining?text=' + text + "&page=" + currentPage + "&size=8", {}, function(data) {
+        totalPages = data.page.totalPages;
+        $('#currentPage').text("Página " + (currentPage+1) + " de " + totalPages);
         var rendered = Mustache.render(templatePlainTweets, {tweets: data._embedded.searchedTweets});
         $('#resultsBlock').html(rendered);
     });
@@ -44,6 +49,8 @@ function registerEvents() {
         }
         else if (menu === 2) {
             // Listar Tweets de base de datos
+            currentPage = 0;
+            $('#divPagination').show();
             listFromDatabase(q);
         }
         else if (menu === 3) {
@@ -58,6 +65,7 @@ function registerEvents() {
         $("#q").val("");
         $("#streamingTweets").addClass("active");
         $("#databaseTweets").removeClass("active");
+        $('#divPagination').hide();
         menu = 1;
         unsubscribeIfNeeded();
     });
@@ -70,6 +78,23 @@ function registerEvents() {
         menu = 2;
         unsubscribeIfNeeded();
     });
+
+    $("#previousPage").click(function(event) {
+        if (currentPage > 0) {
+            currentPage = currentPage - 1;
+            $('#resultsBlock').empty();
+            listFromDatabase($("#q").val())
+        }
+    });
+
+    $("#nextPage").click(function(event) {
+        if (totalPages > currentPage + 1) {
+            currentPage = currentPage + 1;
+            $('#resultsBlock').empty();
+            listFromDatabase($("#q").val())
+        }
+    });
+
 }
 
 function registerTemplates() {

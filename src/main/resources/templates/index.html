@@ -64,16 +64,15 @@
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
           <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
             <h1 id="lblTitle" class="h2">Tweets en streaming</h1>
-            <!--<div class="btn-toolbar mb-2 mb-md-0">-->
-              <!--<div class="btn-group mr-2">-->
-                <!--<button class="btn btn-sm btn-outline-secondary">Share</button>-->
-                <!--<button class="btn btn-sm btn-outline-secondary">Export</button>-->
-              <!--</div>-->
-              <!--<button class="btn btn-sm btn-outline-secondary dropdown-toggle">-->
-                <!--<span data-feather="calendar"></span>-->
-                <!--This week-->
-              <!--</button>-->
-            <!--</div>-->
+            <div id="divPagination" class="btn-toolbar mb-2 mb-md-0" style="display:none">
+              <div class="btn-group mr-2">
+                <button id="previousPage" class="btn btn-sm btn-outline-secondary">Anterior</button>
+                <button id="nextPage" class="btn btn-sm btn-outline-secondary">Siguiente</button>
+              </div>
+              <button id="currentPage" class="btn btn-sm btn-outline-secondary" disabled="disabled">
+                <span data-feather="calendar"></span>
+              </button>
+            </div>
           </div>
 
 
