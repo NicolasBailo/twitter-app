@@ -44,13 +44,8 @@ public class TwitterLookupService {
 
         sessionQueries.put(sessionId, query);
 
-        String queries = "";
-        for(String querySession : sessionQueries.values()){
-            if(!queries.contains(querySession)){
-                queries += queries.isEmpty()?querySession:(","+querySession);
-            }
+        String queries = getQueries();
 
-        }
         if(list.size()>0){
             ((SimpleStreamListener)list.get(0)).setQueryList(queries);
         }else{
@@ -77,10 +72,8 @@ public class TwitterLookupService {
 
         sessionQueries.remove(sessionId);
 
-        String queries = "";
-        for(String querySession : sessionQueries.values()){
-            queries += queries.isEmpty()?querySession:(","+querySession);
-        }
+        String queries = getQueries();
+
         if(list.size()>0){
             ((SimpleStreamListener)list.get(0)).setQueryList(queries);
         }
@@ -121,5 +114,16 @@ public class TwitterLookupService {
 
         }*/
 
+    }
+
+    private String getQueries(){
+        String queries = "";
+        for(String querySession : sessionQueries.values()){
+            if(!queries.contains(querySession)){
+                queries += queries.isEmpty()?querySession:(","+querySession);
+            }
+
+        }
+        return queries;
     }
 }
