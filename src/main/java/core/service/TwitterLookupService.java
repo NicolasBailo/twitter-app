@@ -46,7 +46,10 @@ public class TwitterLookupService {
 
         String queries = "";
         for(String querySession : sessionQueries.values()){
-            queries += queries.isEmpty()?querySession:(","+querySession);
+            if(!queries.contains(querySession)){
+                queries += queries.isEmpty()?querySession:(","+querySession);
+            }
+
         }
         if(list.size()>0){
             ((SimpleStreamListener)list.get(0)).setQueryList(queries);

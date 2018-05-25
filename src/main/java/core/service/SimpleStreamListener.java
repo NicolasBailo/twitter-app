@@ -10,6 +10,10 @@ import org.springframework.social.twitter.api.StreamListener;
 import org.springframework.social.twitter.api.StreamWarningEvent;
 import org.springframework.social.twitter.api.Tweet;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 public class SimpleStreamListener implements StreamListener {
     //private SimpMessageSendingOperations sender;
     //private String query;
@@ -39,7 +43,8 @@ public class SimpleStreamListener implements StreamListener {
     @Override
     public void onTweet(Tweet tweet) {
         try{
-            String[] queries = queryList.split(",");
+            String[] queryArray = queryList.split(",");
+            Set<String> queries = new HashSet<String>(Arrays.asList(queryArray));
 
             for(String query : queries){
                 query= query.trim();
