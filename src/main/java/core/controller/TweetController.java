@@ -3,12 +3,15 @@ package core.controller;
 import core.service.EncryptService;
 import core.service.TwitterLookupService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.social.UncategorizedApiException;
-import org.springframework.social.twitter.api.SearchResults;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpSession;
 
 @Controller
 public class TweetController {
@@ -18,15 +21,19 @@ public class TweetController {
     @Autowired
     EncryptService encryptService;
 
+
     @MessageMapping("/search")
-    public void search(@RequestParam("query") String query) {
-        twitter.search(query);
+    public void search(SimpMessageHeaderAccessor headerAccessor, @RequestParam("query") String query) {
+
+        String sessionId = headerAccessor.getSessionId(); // Session ID
+        twitter.search(query,sessionId);
     }
 
-    @ResponseStatus(value= HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(UncategorizedApiException.class)
-    public SearchResults handleUncategorizedApiException() {
-        return twitter.emptyAnswer();
+    @MessageExceptionHandler(Exception.class)
+    public void handleError(Exception exception) {
+
+        System.err.println("errrorrrrrrr");
+
     }
 
 }

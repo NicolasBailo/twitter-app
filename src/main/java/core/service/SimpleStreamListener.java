@@ -5,20 +5,14 @@ import core.db.model.SearchedTweetDto;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.MessageHeaders;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.social.twitter.api.StreamDeleteEvent;
 import org.springframework.social.twitter.api.StreamListener;
 import org.springframework.social.twitter.api.StreamWarningEvent;
 import org.springframework.social.twitter.api.Tweet;
-import org.springframework.util.MimeTypeUtils;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class SimpleStreamListener implements StreamListener {
     //private SimpMessageSendingOperations sender;
-    private String query;
+    //private String query;
 
     private final String exchangeName = "tweets";
 
@@ -26,26 +20,43 @@ public class SimpleStreamListener implements StreamListener {
 
     @Autowired RabbitTemplate rabbitTemplate;
 
+    private String queryList;
 
 
 
-    public SimpleStreamListener(String query) {
-        this.query = query;
+
+    public SimpleStreamListener(String queryList) {
+        this.queryList = queryList;
 
         rabbitService = new RabbitService();
+    }
+
+
+    public void setQueryList(String queryList){
+        this.queryList = queryList;
     }
 
     @Override
     public void onTweet(Tweet tweet) {
         try{
-            ObjectMapper mapper = new ObjectMapper();
-            SearchedTweetDto searchedTweetDto = new SearchedTweetDto();
-            BeanUtils.copyProperties(tweet, searchedTweetDto);
-            searchedTweetDto.setSearchedQuery(query);
+            String[] queries = queryList.split(",");
 
-            String tweetString = mapper.writeValueAsString(searchedTweetDto);
-            rabbitService.publish(tweetString, exchangeName);
+            for(String query : queries){
+                if(tweet.getText().contains(query)){
+
+                    ObjectMapper mapper = new ObjectMapper();
+                    SearchedTweetDto searchedTweetDto = new SearchedTweetDto();
+                    BeanUtils.copyProperties(tweet, searchedTweetDto);
+                    searchedTweetDto.setSearchedQuery(query);
+
+                    String tweetString = mapper.writeValueAsString(searchedTweetDto);
+                    rabbitService.publish(tweetString, exchangeName);
+                }
+            }
+
         }catch(Exception e){
+
+            System.out.println("peto aquiiiiii");
             e.printStackTrace();
         }
 
