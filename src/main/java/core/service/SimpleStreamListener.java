@@ -42,6 +42,7 @@ public class SimpleStreamListener implements StreamListener {
             String[] queries = queryList.split(",");
 
             for(String query : queries){
+                query= query.trim();
                 if(tweet.getText().contains(query)){
 
                     ObjectMapper mapper = new ObjectMapper();

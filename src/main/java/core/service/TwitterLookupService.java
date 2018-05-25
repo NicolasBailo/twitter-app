@@ -38,6 +38,7 @@ public class TwitterLookupService {
     List<StreamListener> list = new ArrayList<>();
 
 
+
     public void search(String query, String sessionId) {
         Twitter twitter = new TwitterTemplate(consumerKey, consumerSecret, accessToken, accessTokenSecret);
 
@@ -52,11 +53,23 @@ public class TwitterLookupService {
         }else{
             list.add(new SimpleStreamListener(queries));
         }
+
+        if (s != null) {
+            try{
+                s.close();
+                ((Thread)s).stop();
+            }catch(IndexOutOfBoundsException | NullPointerException e){
+                System.out.println("peto y sigo");
+            }
+
+        }
+
         s = twitter.streamingOperations().filter(queries, list);
     }
 
     public void cancelSearch(StompHeaderAccessor headerAccessor) {
         Twitter twitter = new TwitterTemplate(consumerKey, consumerSecret, accessToken, accessTokenSecret);
+
         String sessionId = headerAccessor.getHeader("simpSessionId").toString();
 
         sessionQueries.remove(sessionId);
@@ -65,9 +78,45 @@ public class TwitterLookupService {
         for(String querySession : sessionQueries.values()){
             queries += queries.isEmpty()?querySession:(","+querySession);
         }
+        if(list.size()>0){
+            ((SimpleStreamListener)list.get(0)).setQueryList(queries);
+        }
 
-        ((SimpleStreamListener)list.get(0)).setQueryList(queries);
-        s = twitter.streamingOperations().filter(queries, list);
+
+        if (s != null) {
+            try{
+                s.close();
+                ((Thread)s).stop();
+            }catch(IndexOutOfBoundsException | NullPointerException e){
+                System.out.println("peto y sigo");
+            }
+
+            //list.remove(0);
+
+
+        }
+        if(!queries.isEmpty()){
+            s = twitter.streamingOperations().filter(queries, list);
+        }
+
+
+        //s.close();
+
+        /*if (s != null) {
+            s.close();
+        }*/
+
+        /*if(queries.isEmpty()){
+            ((Thread)list.get(0)).stop();
+            s = twitter.streamingOperations().filter(queries,new ArrayList<StreamListener>());
+
+            list.remove(0);
+            //s.close();
+            ((Thread)s).stop();
+        }else{
+            s = twitter.streamingOperations().filter(queries,list);
+
+        }*/
 
     }
 }
