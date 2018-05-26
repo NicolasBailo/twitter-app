@@ -10,4 +10,12 @@
   min-width: 220px;
 }
 
+.card-deck .card-2 {
+  min-width: 400px;
+}
+
+.card-deck .card-3 {
+  min-width: 300px;
+}
+
 .box-shadow { box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05); }

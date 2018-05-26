@@ -29,13 +29,69 @@ function startSubscription(target, query) {
 
 function listFromDatabase(text) {
     // Peticion AJAX para buscar Tweets
-    $.getJSON('/searchedTweets/search/findByTextContaining?text=' + text + "&page=" + currentPage + "&size=8", {}, function(data) {
+    $.getJSON("/searchedTweets/search/findByTextContaining?text=" + text + "&page=" + currentPage + "&size=8", {}, function(data) {
         totalPages = data.page.totalPages;
         $('#currentPage').text("Página " + (currentPage+1) + " de " + totalPages);
         var rendered = Mustache.render(templatePlainTweets, {tweets: data._embedded.searchedTweets});
         $('#resultsBlock').html(rendered);
     });
 }
+
+function updateHealthInfo(healthInfo) {
+    var rabbitStatus;
+    var mongoStatus;
+
+    if (healthInfo.rabbit === undefined) {
+        healthInfo = healthInfo.responseJSON;
+    }
+
+    if (healthInfo.rabbit !== undefined) {
+        rabbitStatus = healthInfo.rabbit.status;
+    }
+    if (healthInfo.mongo !== undefined) {
+        mongoStatus = healthInfo.mongo.status;
+    }
+
+    if (rabbitStatus === "UP") {
+        $('#rabbitStatusOk').show();
+        $('#rabbitStatusNoOk').hide();
+    } else {
+        $('#rabbitStatusOk').hide();
+        $('#rabbitStatusNoOk').show();
+    }
+
+    if (mongoStatus === "UP") {
+        $('#mongoStatusOk').show();
+        $('#mongoStatusNoOk').hide();
+    } else {
+        $('#mongoStatusOk').hide();
+        $('#mongoStatusNoOk').show();
+    }
+}
+
+function startDashboard() {
+    // Dos peticiones AJAX para traer informacion del estado del sistema
+    $.getJSON("/health", {}).always(updateHealthInfo);
+
+    $.getJSON("/metrics", {}, function(metricsInfo) {
+        var totalStreams = metricsInfo["counter.streams.total"];
+        var currentStreams = metricsInfo["counter.streams.current"];
+        var encryptedTweets = metricsInfo["counter.encryptedtweets.total"];
+
+        if (totalStreams === undefined) totalStreams = 0;
+        if (currentStreams === undefined) currentStreams = 0;
+        if (encryptedTweets === undefined) encryptedTweets = 0;
+
+        $('#totalStreamings').text(totalStreams);
+        $('#currentStreamings').text(currentStreams);
+        $('#encryptedTweets').text(encryptedTweets);
+    });
+
+    // Mientras siga el dashboard seleccionado, se actualiza el estado cada 5 segundos
+    if (menu === 3) setTimeout(startDashboard, 5000);
+}
+
+
 
 function registerEvents() {
     $("#search").submit(function(event){
@@ -53,18 +109,16 @@ function registerEvents() {
             $('#divPagination').show();
             listFromDatabase(q);
         }
-        else if (menu === 3) {
-            // Dashboard
-            unsubscribeIfNeeded();
-
-        }
     });
 
     $("#streamingTweets").click(function(event) {
         $("#lblTitle").text("Tweets en streaming")
+        $("#dashboardBlock").hide();
         $("#q").val("");
+        $("#q").prop('disabled', false);
         $("#streamingTweets").addClass("active");
         $("#databaseTweets").removeClass("active");
+        $("#dashboard").removeClass("active");
         $('#divPagination').hide();
         menu = 1;
         unsubscribeIfNeeded();
@@ -72,11 +126,27 @@ function registerEvents() {
 
     $("#databaseTweets").click(function(event) {
         $("#lblTitle").text("Tweets en la base de datos")
+        $("#dashboardBlock").hide();
         $("#q").val("");
+        $("#q").prop('disabled', false);
         $("#streamingTweets").removeClass("active");
         $("#databaseTweets").addClass("active");
+        $("#dashboard").removeClass("active");
         menu = 2;
         unsubscribeIfNeeded();
+    });
+
+    $("#dashboard").click(function(event) {
+        $("#lblTitle").text("Monitorización de la sesión")
+        $("#dashboardBlock").show();
+        $("#q").val("");
+        $("#q").prop('disabled', true);
+        $("#streamingTweets").removeClass("active");
+        $("#databaseTweets").removeClass("active");
+        $("#dashboard").addClass("active");
+        menu = 3;
+        unsubscribeIfNeeded();
+        startDashboard();
     });
 
     $("#previousPage").click(function(event) {

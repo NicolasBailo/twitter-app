@@ -76,7 +76,7 @@ body {
 
 .form-control-dark {
   color: #fff;
-  background-color: rgba(255, 255, 255, .1);
+  background-color: rgba(255, 255, 255, .5);
   border-color: rgba(255, 255, 255, .1);
 }
 

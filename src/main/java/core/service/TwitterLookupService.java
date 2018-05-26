@@ -2,6 +2,7 @@ package core.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.actuate.metrics.CounterService;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.social.twitter.api.Stream;
 import org.springframework.social.twitter.api.StreamListener;
@@ -18,6 +19,9 @@ public class TwitterLookupService {
 
     @Autowired
     EncryptService encryptService;
+
+    @Autowired
+    private CounterService counterService;
 
     @Value("${twitter.consumerKey}")
     private String consumerKey;
@@ -40,6 +44,9 @@ public class TwitterLookupService {
 
 
     public void search(String query, String sessionId) {
+        counterService.increment("counter.streams.current");
+        counterService.increment("counter.streams.total");
+
         Twitter twitter = new TwitterTemplate(consumerKey, consumerSecret, accessToken, accessTokenSecret);
 
         sessionQueries.put(sessionId, query);
@@ -66,6 +73,8 @@ public class TwitterLookupService {
     }
 
     public void cancelSearch(StompHeaderAccessor headerAccessor) {
+        counterService.decrement("counter.streams.current");
+
         Twitter twitter = new TwitterTemplate(consumerKey, consumerSecret, accessToken, accessTokenSecret);
 
         String sessionId = headerAccessor.getHeader("simpSessionId").toString();

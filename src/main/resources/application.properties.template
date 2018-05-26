@@ -14,3 +14,12 @@ twitter.accessTokenSecret=XXXX
 
 #ENCRYPTOR
 encrypt.aes.key = XXXX
+
+#ACTUATOR
+management.security.enabled=false
+endpoints.metrics.id=metrics
+endpoints.metrics.sensitive=false
+endpoints.metrics.enabled=true
+info.app.name=Twitter App
+info.app.description=Ismael & Nicolas Project for TMDAD
+info.app.version=1.0.0

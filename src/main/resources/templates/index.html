@@ -50,9 +50,9 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a id="dashboard" class="nav-link" href="#">
                   <span data-feather="monitor"></span>
-                  Dashboard (en desarrollo...)
+                  Dashboard
                 </a>
               </li>
             </ul>
@@ -77,6 +77,61 @@
 
 
           <div id="resultsBlock" class="card-deck mb-3 text-center"></div>
+
+          <div id="dashboardBlock" class="card-deck mb-3 text-center" style="display:none">
+            <!--Estado de RabbitMQ-->
+            <div class="card card-2 mb-4 box-shadow">
+              <div class="card-header">
+                <h4 class="my-0 font-weight-normal">Estado de RabbitMQ</h4>
+              </div>
+              <div class="card-body">
+                <p id="rabbitStatusOk" class="mt-3 mb-4" style="font-size:50px;">Operativo</p>
+                <p id="rabbitStatusNoOk" class="mt-3 mb-4" style="font-size:50px;">No operativo</p>
+              </div>
+            </div>
+
+            <!--Estado de MongoDB-->
+            <div class="card card-2 mb-4 box-shadow">
+              <div class="card-header">
+                <h4 class="my-0 font-weight-normal">Estado de MongoDB</h4>
+              </div>
+              <div class="card-body">
+                <p id="mongoStatusOk" class="mt-3 mb-4" style="font-size:50px;">Operativo</p>
+                <p id="mongoStatusNoOk" class="mt-3 mb-4" style="font-size:50px;">No operativo</p>
+              </div>
+            </div>
+
+            <!--Numero de streamings actualmente abiertos-->
+            <div class="card card-3 mb-4 box-shadow">
+              <div class="card-header">
+                <h4 class="my-0 font-weight-normal">Número de streamings actualmente abiertos</h4>
+              </div>
+              <div class="card-body">
+                <p id="currentStreamings" class="mt-3 mb-4" style="font-size:50px;"></p>
+              </div>
+            </div>
+
+            <!--Numero total de streamings abiertos en la sesion-->
+            <div class="card card-3 mb-4 box-shadow">
+              <div class="card-header">
+                <h4 class="my-0 font-weight-normal">Número total de streamings abiertos en la sesión</h4>
+              </div>
+              <div class="card-body">
+                <p id="totalStreamings" class="mt-3 mb-4" style="font-size:50px;"></p>
+              </div>
+            </div>
+
+            <!--Numero total de tweets encriptados en la sesion-->
+            <div class="card card-3 mb-4 box-shadow">
+              <div class="card-header">
+                <h4 class="my-0 font-weight-normal">Número total de tweets encriptados en la sesión</h4>
+              </div>
+              <div class="card-body">
+                <p id="encryptedTweets" class="mt-3 mb-4" style="font-size:50px;"></p>
+              </div>
+            </div>
+
+          </div>
 
           <!--<h2>Section title</h2>-->
           <!--<div class="table-responsive">-->
