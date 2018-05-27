@@ -1,5 +1,6 @@
 package core.service;
 
+import core.tweetprocessors.EncryptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.metrics.CounterService;
@@ -36,11 +37,9 @@ public class TwitterLookupService {
     private String accessTokenSecret;
 
 
-    HashMap<String, String> sessionQueries= new HashMap<>();
-
     Stream s = null;
     List<StreamListener> list = new ArrayList<>();
-
+    HashMap<String, String> sessionQueries = new HashMap<>();
 
 
     public void search(String query, String sessionId) {
@@ -48,91 +47,58 @@ public class TwitterLookupService {
         counterService.increment("counter.streams.total");
 
         Twitter twitter = new TwitterTemplate(consumerKey, consumerSecret, accessToken, accessTokenSecret);
-
         sessionQueries.put(sessionId, query);
 
         String queries = getQueries();
-
-        if(list.size()>0){
-            ((SimpleStreamListener)list.get(0)).setQueryList(queries);
-        }else{
+        if (list.size() > 0) {
+            ((SimpleStreamListener) list.get(0)).setQueryList(queries);
+        } else {
             list.add(new SimpleStreamListener(queries));
         }
 
-        if (s != null) {
-            try{
-                s.close();
-                ((Thread)s).stop();
-            }catch(IndexOutOfBoundsException | NullPointerException e){
-                System.out.println("peto y sigo");
-            }
-
-        }
-
+        closeStreamAndStopThread();
         s = twitter.streamingOperations().filter(queries, list);
     }
 
     public void cancelSearch(StompHeaderAccessor headerAccessor) {
         counterService.decrement("counter.streams.current");
-
         Twitter twitter = new TwitterTemplate(consumerKey, consumerSecret, accessToken, accessTokenSecret);
 
         String sessionId = headerAccessor.getHeader("simpSessionId").toString();
-
         sessionQueries.remove(sessionId);
 
         String queries = getQueries();
-
-        if(list.size()>0){
-            ((SimpleStreamListener)list.get(0)).setQueryList(queries);
+        if (list.size() > 0) {
+            ((SimpleStreamListener) list.get(0)).setQueryList(queries);
         }
 
+        closeStreamAndStopThread();
 
-        if (s != null) {
-            try{
-                s.close();
-                ((Thread)s).stop();
-            }catch(IndexOutOfBoundsException | NullPointerException e){
-                System.out.println("peto y sigo");
-            }
-
-            //list.remove(0);
-
-
-        }
-        if(!queries.isEmpty()){
+        if (!queries.isEmpty()) {
             s = twitter.streamingOperations().filter(queries, list);
         }
-
-
-        //s.close();
-
-        /*if (s != null) {
-            s.close();
-        }*/
-
-        /*if(queries.isEmpty()){
-            ((Thread)list.get(0)).stop();
-            s = twitter.streamingOperations().filter(queries,new ArrayList<StreamListener>());
-
-            list.remove(0);
-            //s.close();
-            ((Thread)s).stop();
-        }else{
-            s = twitter.streamingOperations().filter(queries,list);
-
-        }*/
-
     }
 
-    private String getQueries(){
+    private String getQueries() {
         String queries = "";
-        for(String querySession : sessionQueries.values()){
-            if(!queries.contains(querySession)){
-                queries += queries.isEmpty()?querySession:(","+querySession);
+        for (String querySession : sessionQueries.values()) {
+            if (!queries.contains(querySession)) {
+                queries += queries.isEmpty() ? querySession : ("," + querySession);
             }
 
         }
         return queries;
     }
+
+    private void closeStreamAndStopThread() {
+        if (s != null) {
+            try {
+                s.close();
+                ((Thread) s).stop();
+            } catch (IndexOutOfBoundsException | NullPointerException e) {
+                System.out.println("Error controlado al cerrar un Thread de búsqueda");
+            }
+        }
+    }
+
 }

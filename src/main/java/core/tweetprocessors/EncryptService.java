@@ -1,8 +1,7 @@
-package core.service;
+package core.tweetprocessors;
 
 import core.db.model.GeneratedTweetDto;
 import core.db.model.SearchedTweetDto;
-import core.db.model.TweetJsonDto;
 import core.db.repository.IGeneratedTweetRepository;
 import core.db.repository.ISearchedTweetRepository;
 import core.utils.Encryptor;
@@ -10,15 +9,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.metrics.CounterService;
-import org.springframework.social.twitter.api.Tweet;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-
-//import org.apache.commons.beanutils.BeanUtils;
-
-
 
 @Service
 public class EncryptService {
@@ -34,7 +28,7 @@ public class EncryptService {
     @Value("${encrypt.aes.key}")
     private String aesKey;
 
-    public EncryptService(){
+    public EncryptService() {
         super();
     }
 
@@ -76,9 +70,6 @@ public class EncryptService {
 
     public GeneratedTweetDto encryptTweet(SearchedTweetDto tweet) {
         Encryptor encryptor = new Encryptor();
-        //SearchedTweetDto searchedTweetDto = new SearchedTweetDto();
-
-        //BeanUtils.copyProperties(tweet, searchedTweetDto);
 
         if (tweet.getText() != null) {
             return copyAndEncryptTweet(encryptor, tweet);

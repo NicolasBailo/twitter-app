@@ -1,11 +1,10 @@
-package core.service;
+package core.tweetsaver;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import core.db.model.GeneratedTweetDto;
 import core.db.model.SearchedTweetDto;
 import core.db.repository.ISearchedTweetRepository;
+import core.tweetprocessors.EncryptService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;

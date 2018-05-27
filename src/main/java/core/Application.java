@@ -1,7 +1,7 @@
 package core;
 
 
-import core.service.TweetSaver;
+import core.tweetsaver.TweetSaver;
 import org.springframework.amqp.core.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

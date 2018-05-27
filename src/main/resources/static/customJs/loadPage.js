@@ -21,6 +21,7 @@ function startSearch(event) {
     }
     else if (menu === 2) {
         // Listar Tweets de base de datos
+        currentPage = 0;
         $('#divPagination').show();
         listFromDatabase(q);
     }

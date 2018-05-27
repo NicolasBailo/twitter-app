@@ -1,29 +1,12 @@
 package core.db.model;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.io.Serializable;
 
-//@Document(collection = "tweets")
 public class TweetJsonDto implements Serializable {
 
     @Id
     String idStr;
-
-    //Date createdAt;
-
-    //EntityDto [] entities;
-
-    /*Object extradata;
-
-    public Object getExtradata() {
-        return extradata;
-    }
-
-    public void setExtradata(Object extradata) {
-        this.extradata = extradata;
-    }*/
 
     Integer favouriteCount;
 
@@ -47,8 +30,6 @@ public class TweetJsonDto implements Serializable {
 
     Boolean retweeted;
 
-    //RetweetStatusDto retweetedStatusDto;
-
     String source;
 
     String text;
@@ -56,9 +37,6 @@ public class TweetJsonDto implements Serializable {
     Long toUserId;
 
     String unmodifiedText;
-
-    //TwitterUserDto user;
-
 
     public String getIdStr() {
         return idStr;

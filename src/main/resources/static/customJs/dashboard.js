@@ -11,6 +11,7 @@ function dashboardClicked() {
     $("#streamingTweets").removeClass("active");
     $("#databaseTweets").removeClass("active");
     $("#dashboard").addClass("active");
+    $('#divPagination').hide();
     menu = 3;
     unsubscribeIfNeeded();
     startDashboard();
