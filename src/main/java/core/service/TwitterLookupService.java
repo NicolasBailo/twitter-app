@@ -61,11 +61,13 @@ public class TwitterLookupService {
     }
 
     public void cancelSearch(StompHeaderAccessor headerAccessor) {
-        counterService.decrement("counter.streams.current");
         Twitter twitter = new TwitterTemplate(consumerKey, consumerSecret, accessToken, accessTokenSecret);
 
         String sessionId = headerAccessor.getHeader("simpSessionId").toString();
-        sessionQueries.remove(sessionId);
+        if (sessionQueries.containsKey(sessionId)) {
+            sessionQueries.remove(sessionId);
+            counterService.decrement("counter.streams.current");
+        }
 
         String queries = getQueries();
         if (list.size() > 0) {
