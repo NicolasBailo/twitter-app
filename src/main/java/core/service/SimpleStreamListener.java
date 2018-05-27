@@ -15,24 +15,18 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class SimpleStreamListener implements StreamListener {
-    //private SimpMessageSendingOperations sender;
-    //private String query;
 
     private final String exchangeName = "tweets";
 
-    @Autowired RabbitService rabbitService;
-
-    @Autowired RabbitTemplate rabbitTemplate;
 
     private String queryList;
 
+    private RabbitService rabbitService;
 
 
-
-    public SimpleStreamListener(String queryList) {
+    public SimpleStreamListener(String queryList, RabbitService rabbitService) {
         this.queryList = queryList;
-
-        rabbitService = new RabbitService();
+        this.rabbitService = rabbitService;
     }
 
 
@@ -83,9 +77,4 @@ public class SimpleStreamListener implements StreamListener {
     public void onWarning(StreamWarningEvent warningEvent) {
 
     }
-
-
-
-
-
 }

@@ -3,32 +3,41 @@ package core.service;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
 
 @Service
 public class RabbitService {
 
     //private final String exchangeName = "processor1";
-    private final String ENV_AMQPURL_NAME = "CLOUDAMQP_URL";
 
     private ConnectionFactory factory;
-    public RabbitService(){
+
+    @Value("${spring.rabbitmq.host}")
+    private String rabbitHost;
+
+    @Value("${spring.rabbitmq.username}")
+    private String rabbitUsername;
+
+    @Value("${spring.rabbitmq.password}")
+    private String rabbitPassword;
+
+    @Value("${spring.rabbitmq.virtual-host}")
+    private String rabbitVHost;
+
+
+
+
+    public void createConnectionFactory() {
         factory = new ConnectionFactory();
-        String amqpURL = System.getenv().get(ENV_AMQPURL_NAME) != null ? System.getenv().get(ENV_AMQPURL_NAME) : "amqp://localhost";
+        String amqpURL = "amqp://" + rabbitVHost + ":" + rabbitPassword + "@" + rabbitHost + "/" + rabbitUsername;
         try {
             factory.setUri(amqpURL);
         } catch (Exception e) {
-            System.out.println(" [*] AQMP broker not found in " + amqpURL);
+            System.out.println(" [*] AQMP broker NOT found in " + amqpURL);
             System.exit(-1);
         }
-
         System.out.println(" [*] AQMP broker found in " + amqpURL);
-
-
-
-
-
     }
 
     public void publish(String message, String exchangeName) throws Exception{
@@ -36,6 +45,9 @@ public class RabbitService {
         // la variable de entorno que se llame como diga ENV_AMQPURL_NAME
         // o sino en localhost)
 
+        if(factory == null){
+            createConnectionFactory();
+        }
 
         Connection connection = factory.newConnection();
         // Con un solo canal

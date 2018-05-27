@@ -23,8 +23,6 @@ public class Application {
     static final String QUEUE_NAME_PROCESSOR_1= "QUEUE_PROCESSOR_1";
     static final String QUEUE_NAME_TWEET_SAVER = "QUEUE_TWEET_SAVER";
 
-
-
     @Bean
     Queue queueProcessor1() {
         return new Queue(QUEUE_NAME_PROCESSOR_1, true);
@@ -42,11 +40,12 @@ public class Application {
 
     @Bean
     SimpleMessageListenerContainer containerProcessor1(ConnectionFactory connectionFactory,
-                                             MessageListenerAdapter listenerAdapterProcessor1) {
+                                                       MessageListenerAdapter listenerAdapterProcessor1) {
         SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
         container.setQueueNames(QUEUE_NAME_PROCESSOR_1);
         container.setMessageListener(listenerAdapterProcessor1);
+
         return container;
     }
 
@@ -72,12 +71,14 @@ public class Application {
     }
 
     @Bean
-    SimpleMessageListenerContainer containerTweetSaver(ConnectionFactory connectionFactory2,
-                                             MessageListenerAdapter listenerAdapterTweetSaver) {
+    SimpleMessageListenerContainer containerTweetSaver(ConnectionFactory connectionFactory,
+                                                       MessageListenerAdapter listenerAdapterTweetSaver) {
         SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
-        container.setConnectionFactory(connectionFactory2);
+
+        container.setConnectionFactory(connectionFactory);
         container.setQueueNames(QUEUE_NAME_TWEET_SAVER);
         container.setMessageListener(listenerAdapterTweetSaver);
+
         return container;
     }
 
@@ -94,13 +95,6 @@ public class Application {
     @Bean
     public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
         return args -> {
-
-//            System.out.println("Let's inspect the beans provided by Spring Boot:");
-//            String[] beanNames = ctx.getBeanDefinitionNames();
-//            Arrays.sort(beanNames);
-//            for (String beanName : beanNames) {
-//                System.out.println(beanName);
-//            }
 
         };
     }

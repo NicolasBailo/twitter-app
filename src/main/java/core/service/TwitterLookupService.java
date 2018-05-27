@@ -24,6 +24,9 @@ public class TwitterLookupService {
     @Autowired
     private CounterService counterService;
 
+    @Autowired
+    private RabbitService rabbitService;
+
     @Value("${twitter.consumerKey}")
     private String consumerKey;
 
@@ -53,7 +56,7 @@ public class TwitterLookupService {
         if (list.size() > 0) {
             ((SimpleStreamListener) list.get(0)).setQueryList(queries);
         } else {
-            list.add(new SimpleStreamListener(queries));
+            list.add(new SimpleStreamListener(queries,rabbitService));
         }
 
         closeStreamAndStopThread();
