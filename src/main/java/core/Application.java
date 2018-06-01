@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
-import core.service.Receiver;
+import core.tweetprocessors.Receiver;
 @SpringBootApplication
 public class Application {
 

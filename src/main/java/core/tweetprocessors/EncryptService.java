@@ -46,28 +46,6 @@ public class EncryptService {
         return generatedTweetDto;
     }
 
-    public List<GeneratedTweetDto> encryptTweets(List<SearchedTweetDto> tweets) {
-        List<GeneratedTweetDto> result = new ArrayList<>();
-        List<SearchedTweetDto> oldTweets = new ArrayList<>();
-
-        Encryptor encryptor = new Encryptor();
-        for (SearchedTweetDto tweet : tweets) {
-            SearchedTweetDto searchedTweetDto = new SearchedTweetDto();
-
-            BeanUtils.copyProperties(tweet, searchedTweetDto);
-            oldTweets.add(searchedTweetDto);
-
-            if (tweet.getText() != null) {
-                result.add(copyAndEncryptTweet(encryptor, tweet));
-            }
-        }
-
-        searchedTweetRepository.save(oldTweets);
-        generatedTweetRepository.save(result);
-
-        return result;
-    }
-
     public GeneratedTweetDto encryptTweet(SearchedTweetDto tweet) {
         Encryptor encryptor = new Encryptor();
 

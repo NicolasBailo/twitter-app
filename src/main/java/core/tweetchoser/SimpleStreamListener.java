@@ -1,10 +1,8 @@
-package core.service;
+package core.tweetchoser;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import core.db.model.SearchedTweetDto;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.twitter.api.StreamDeleteEvent;
 import org.springframework.social.twitter.api.StreamListener;
 import org.springframework.social.twitter.api.StreamWarningEvent;

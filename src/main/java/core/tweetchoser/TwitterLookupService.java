@@ -1,4 +1,4 @@
-package core.service;
+package core.tweetchoser;
 
 import core.tweetprocessors.EncryptService;
 import org.springframework.beans.factory.annotation.Autowired;

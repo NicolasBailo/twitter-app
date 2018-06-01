@@ -1,4 +1,4 @@
-package core.service;
+package core.tweetprocessors;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;

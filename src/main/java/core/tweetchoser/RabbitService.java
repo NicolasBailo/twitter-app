@@ -1,4 +1,4 @@
-package core.service;
+package core.tweetchoser;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;

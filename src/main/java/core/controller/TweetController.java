@@ -1,6 +1,6 @@
 package core.controller;
 
-import core.service.TwitterLookupService;
+import core.tweetchoser.TwitterLookupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.MessageMapping;

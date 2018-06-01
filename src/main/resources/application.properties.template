@@ -23,3 +23,10 @@ endpoints.metrics.enabled=true
 info.app.name=Twitter App
 info.app.description=Ismael & Nicolas Project for TMDAD
 info.app.version=1.0.0
+
+#RABBITMQ
+spring.rabbitmq.username=XXXX
+spring.rabbitmq.password=XXXX
+spring.rabbitmq.host=XXXX
+spring.rabbitmq.virtual-host=XXXX
+

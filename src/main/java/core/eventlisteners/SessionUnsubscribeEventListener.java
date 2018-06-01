@@ -1,5 +1,6 @@
-package core.service;
+package core.eventlisteners;
 
+import core.tweetchoser.TwitterLookupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
