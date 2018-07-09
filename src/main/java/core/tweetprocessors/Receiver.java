@@ -21,6 +21,9 @@ public class Receiver {
     @Autowired
     EncryptService encryptService;
 
+    @Autowired
+    VowelChangeService vowelChangeService;
+
     private CountDownLatch latch = new CountDownLatch(1);
 
     public void receiveMessage(byte[] bytes) {
@@ -43,8 +46,17 @@ public class Receiver {
         GeneratedTweetDto generatedTweetDto = null;
         try {
             SearchedTweetDto searchedTweetDto = mapper.readValue(message, SearchedTweetDto.class);
-            generatedTweetDto = encryptService.encryptTweet(searchedTweetDto);
-            System.out.println("Received from <" + searchedTweetDto.getSearchedQuery()+ ">");
+
+            if (searchedTweetDto.getOperation() == searchedTweetDto.operationEncrypt) {
+                generatedTweetDto = encryptService.encryptTweet(searchedTweetDto);
+            }
+            else if (searchedTweetDto.getOperation() == searchedTweetDto.operationChange) {
+                generatedTweetDto = vowelChangeService.changeTweet(searchedTweetDto);
+            }
+
+            System.out.println("Received from <" + searchedTweetDto.getSearchedQuery()
+                    + "> ; Operation<" + searchedTweetDto.getOperation() + ">");
+
             messagingTemplate.convertAndSend("/queue/search/" + searchedTweetDto.getSearchedQuery(), generatedTweetDto);
         } catch (IOException e) {
             e.printStackTrace();

@@ -18,18 +18,23 @@ public class SimpleStreamListener implements StreamListener {
 
 
     private String queryList;
-
+    private int operation;
     private RabbitService rabbitService;
 
 
-    public SimpleStreamListener(String queryList, RabbitService rabbitService) {
+    public SimpleStreamListener(String queryList, int operation, RabbitService rabbitService) {
         this.queryList = queryList;
+        this.operation = operation;
         this.rabbitService = rabbitService;
     }
 
 
     public void setQueryList(String queryList){
         this.queryList = queryList;
+    }
+
+    public void setOperation(int operation){
+        this.operation = operation;
     }
 
     @Override
@@ -46,6 +51,7 @@ public class SimpleStreamListener implements StreamListener {
                     SearchedTweetDto searchedTweetDto = new SearchedTweetDto();
                     BeanUtils.copyProperties(tweet, searchedTweetDto);
                     searchedTweetDto.setSearchedQuery(query);
+                    searchedTweetDto.setOperation(operation);
 
                     String tweetString = mapper.writeValueAsString(searchedTweetDto);
                     rabbitService.publish(tweetString, exchangeName);

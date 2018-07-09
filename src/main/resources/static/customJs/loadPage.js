@@ -16,10 +16,14 @@ function startSearch(event) {
     var q = $("#q").val();
 
     if (menu === 1) {
-        // Streaming de Tweets
-        startSubscription(target, q);
+        // Streaming de Tweets (operacion ENCRIPTAR)
+        startSubscription(target, q, 1);
     }
     else if (menu === 2) {
+        // Streaming de Tweets (operacion CAMBIAR VOCALES)
+        startSubscription(target, q, 2);
+    }
+    else if (menu === 3) {
         // Listar Tweets de base de datos
         currentPage = 0;
         $('#divPagination').show();
@@ -29,7 +33,8 @@ function startSearch(event) {
 
 function registerEvents() {
     $("#search").submit(startSearch);
-    $("#streamingTweets").click(streamingClicked);
+    $("#streamingEncryptTweets").click(streamingEncryptClicked);
+    $("#streamingChangeTweets").click(streamingChangeClicked);
     $("#databaseTweets").click(databaseClicked);
     $("#dashboard").click(dashboardClicked);
     $("#previousPage").click(previousPageClicked);

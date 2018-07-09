@@ -8,7 +8,8 @@ function dashboardClicked() {
     $("#q").val("");
     $("#q").prop('disabled', true);
     $("#q").attr('placeholder', '');
-    $("#streamingTweets").removeClass("active");
+    $("#streamingEncryptTweets").removeClass("active");
+    $("#streamingChangeTweets").removeClass("active");
     $("#databaseTweets").removeClass("active");
     $("#dashboard").addClass("active");
     $('#divPagination').hide();
@@ -64,12 +65,15 @@ function updateMetricsInfo(metricsInfo) {
     var totalStreams = metricsInfo["counter.streams.total"];
     var currentStreams = metricsInfo["counter.streams.current"];
     var encryptedTweets = metricsInfo["counter.encryptedtweets.total"];
+    var changedTweets = metricsInfo["counter.changedtweets.total"];
 
     if (totalStreams === undefined) totalStreams = 0;
     if (currentStreams === undefined) currentStreams = 0;
     if (encryptedTweets === undefined) encryptedTweets = 0;
+    if (changedTweets === undefined) changedTweets = 0;
 
     $('#totalStreamings').text(totalStreams);
     $('#currentStreamings').text(currentStreams);
     $('#encryptedTweets').text(encryptedTweets);
+    $('#changedTweets').text(changedTweets);
 }

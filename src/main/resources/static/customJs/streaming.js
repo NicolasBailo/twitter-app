@@ -2,13 +2,14 @@
  *   Funciones JavaScript relacionadas con la parte STREAMING de la aplicación
  */
 
-function streamingClicked() {
+function streamingEncryptClicked() {
     $("#lblTitle").text("Tweets en streaming")
     $("#dashboardBlock").hide();
     $("#q").val("");
     $("#q").prop('disabled', false);
     $("#q").attr('placeholder', 'Press Enter to start a new search');
-    $("#streamingTweets").addClass("active");
+    $("#streamingEncryptTweets").addClass("active");
+    $("#streamingChangeTweets").removeClass("active");
     $("#databaseTweets").removeClass("active");
     $("#dashboard").removeClass("active");
     $('#divPagination').hide();
@@ -16,10 +17,28 @@ function streamingClicked() {
     unsubscribeIfNeeded();
 }
 
-function startSubscription(target, query) {
+function streamingChangeClicked() {
+    $("#lblTitle").text("Tweets en streaming")
+    $("#dashboardBlock").hide();
+    $("#q").val("");
+    $("#q").prop('disabled', false);
+    $("#q").attr('placeholder', 'Press Enter to start a new search');
+    $("#streamingEncryptTweets").removeClass("active");
+    $("#streamingChangeTweets").addClass("active");
+    $("#changeTweets").removeClass("active");
+    $("#databaseTweets").removeClass("active");
+    $("#dashboard").removeClass("active");
+    $('#divPagination').hide();
+    menu = 2;
+    unsubscribeIfNeeded();
+}
+
+
+function startSubscription(target, query, mode) {
     unsubscribeIfNeeded();
 
-    stompClient.send("/app/" + target, {}, query);
+    var parameter = {query: query, mode: mode};
+    stompClient.send("/app/" + target, {}, JSON.stringify(parameter));
     subscription = stompClient.subscribe('/queue/search/' + query, showEncrpytedTweet);
 }
 

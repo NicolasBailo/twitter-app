@@ -1,5 +1,7 @@
 package core.controller;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.util.JSON;
 import core.tweetchoser.TwitterLookupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
@@ -17,7 +19,12 @@ public class TweetController {
     @MessageMapping("/search")
     public void search(SimpMessageHeaderAccessor headerAccessor, @RequestParam("query") String query) {
         String sessionId = headerAccessor.getSessionId(); // Gets session ID
-        twitter.search(query, sessionId);
+
+        // Reads param
+        BasicDBObject argument = (BasicDBObject) JSON.parse(query);
+        String q = (String)argument.get("query");
+        int op = (int)argument.get("mode");
+        twitter.search(q, op, sessionId);
     }
 
     @MessageExceptionHandler(Exception.class)

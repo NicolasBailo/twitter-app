@@ -45,7 +45,7 @@ public class TwitterLookupService {
     HashMap<String, String> sessionQueries = new HashMap<>();
 
 
-    public void search(String query, String sessionId) {
+    public void search(String query, int operation, String sessionId) {
         counterService.increment("counter.streams.current");
         counterService.increment("counter.streams.total");
 
@@ -55,8 +55,9 @@ public class TwitterLookupService {
         String queries = getQueries();
         if (list.size() > 0) {
             ((SimpleStreamListener) list.get(0)).setQueryList(queries);
+            ((SimpleStreamListener) list.get(0)).setOperation(operation);
         } else {
-            list.add(new SimpleStreamListener(queries,rabbitService));
+            list.add(new SimpleStreamListener(queries,operation,rabbitService));
         }
 
         closeStreamAndStopThread();

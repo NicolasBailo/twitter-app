@@ -8,7 +8,8 @@ function databaseClicked() {
     $("#q").val("");
     $("#q").prop('disabled', false);
     $("#q").attr('placeholder', 'Press Enter to start a new search');
-    $("#streamingTweets").removeClass("active");
+    $("#streamingEncryptTweets").removeClass("active");
+    $("#streamingChangeTweets").removeClass("active");
     $("#databaseTweets").addClass("active");
     $("#dashboard").removeClass("active");
     menu = 2;
